@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "XBox Controller",
+  "version": "0.0.1",
+  "description": "XBox Controller，开源的 XBox 适配器",
+  "homepage_url": "https://github.com/Michael1015198808/Chrome-Plugin-XBox",
+  "permissions": [
+      "tabs"
+  ],
+  "background": {
+      "service_worker":
+      "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "main.js"
+      ],
+      "matches": ["<all_urls>"],
+      "run_at": "document_start"
+    }
+  ]
+}
