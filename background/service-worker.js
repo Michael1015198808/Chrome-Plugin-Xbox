@@ -6,6 +6,14 @@ chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         let tab = sender.tab;
         if (message.command != prev_msg || counter == interval) {
+            if (message.command.startsWith("move")) {
+                if (message.command[4] == "l") {
+                    chrome.tabs.move(tab.id, {index: tab.index - 1});
+                }
+                if (message.command[4] == "r") {
+                    chrome.tabs.move(tab.id, {index: tab.index + 1});
+                }
+            }
             if (message.command == "prev") {
                 chrome.tabs.query({index: tab.index - 1}, (tabs) => {
                     if (tabs.length > 0) {
@@ -15,7 +23,9 @@ chrome.runtime.onMessage.addListener(
             }
             if (message.command == "next") {
                 chrome.tabs.query({index: tab.index + 1}, (tabs) => {
-                    chrome.tabs.update(tabs[0].id, {active: true});
+                    if (tabs.length > 0) {
+                        chrome.tabs.update(tabs[0].id, {active: true});
+                    }
                 })
             }
             if (message.command == "close") {
@@ -30,6 +40,5 @@ chrome.runtime.onMessage.addListener(
                 counter = 0;
             }
         }
-        sendResponse({farewell: message.command + tab.index});
     }
 );
