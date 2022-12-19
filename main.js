@@ -1,10 +1,14 @@
 let sensitivity = 20;
 let threshold = 0.05;
-let X  = 2;
+const X  = 2;
 const LT = 6;
 const RT = 7;
-let LB = 4;
-let RB = 5;
+const LB = 4;
+const RB = 5;
+const RCON = 11;
+
+var xPos = 0;
+var yPos = 0;
 
 function connecthandler(e) {
     console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
@@ -29,6 +33,10 @@ function connecthandler(e) {
             if (gamepad.buttons[X].pressed) {
                 chrome.runtime.sendMessage({command: "close"});
             }
+            if (gamepad.buttons[RCON].pressed) {
+                console.log(xPos, yPos);
+                document.elementFromPoint(xPos, yPos).click();
+            }
         }
         var dx = Math.abs(axes[0]) > threshold ? axes[0] * sensitivity : 0;
         var dy = Math.abs(axes[1]) > threshold ? axes[1] * sensitivity : 0;
@@ -39,3 +47,8 @@ function connecthandler(e) {
 }
 
 window.addEventListener("gamepadconnected", connecthandler);
+
+addEventListener("mousemove", (event) => {
+    xPos = event.clientX;
+    yPos = event.clientY;
+});
